@@ -20,7 +20,7 @@ export const SpidermanPath: React.FC = () => {
     scenes.forEach((scene, index) => {
       ScrollTrigger.create({
         trigger: 'body',
-        start: \`\${index * 100}vh top\`,
+        start: `${index * 100}vh top`,
         onEnter: () => setSceneIndex(index),
         onEnterBack: () => setSceneIndex(index),
       });
