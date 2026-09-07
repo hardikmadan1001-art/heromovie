@@ -34,17 +34,30 @@ const App: React.FC = () => {
   return (
     <>
       <CustomCursor />
+      
+      {/* 1. LOADING LAYER (Highest Z-Index) */}
       {phase === 'preload' && <LoadingScreen />}
       
-      <div className="ui-layer">
-        {phase === 'void' && <div className="void-ui" />}
+      {/* 2. UI LAYER (Above Canvas) */}
+      <div className="ui-layer" style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: 100,
+      }}>
+        {phase === 'void' && <VoidUI />}
         {phase === 'choice' && <div className="choice-ui" />}
       </div>
 
+      {/* 3. 3D CANVAS LAYER (Background) */}
       <Canvas
         shadows
         camera={{ fov: 35 }}
         gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
+        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
       >
         <color attach="background" args={['#05050a']} />
         
@@ -60,24 +73,76 @@ const App: React.FC = () => {
             luminanceSmoothing={0.9} 
             mipmapBlur 
           />
-          <Noise 
-            opacity={0.04} 
-            blendMode="overlay" 
-          />
-          <Vignette 
-            offset={0.3} 
-            darkness={0.5} 
-          />
-          <ChromaticAberration 
-            offset={[0.001, 0.001]} 
-          />
+          <Noise opacity={0.04} blendMode="overlay" />
+          <Vignette offset={0.3} darkness={0.5} />
+          <ChromaticAberration offset={[0.001, 0.001]} />
         </EffectComposer>
       </Canvas>
       
       {phase === 'finale' && <Finale />}
-
       <div style={{ height: '1400vh', width: '100vw', pointerEvents: 'none' }} />
     </>
+  );
+};
+
+// Separated UI Component to avoid Canvas rendering issues
+const VoidUI = () => {
+  const { setAudioUnlocked, audioUnlocked } = useStore();
+  const [isUnlocked, setIsUnlocked] = React.useState(false);
+
+  const handleEnter = () => {
+    setAudioUnlocked(true);
+    setIsUnlocked(true);
+  };
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative'
+    }}>
+      {!isUnlocked ? (
+        <div 
+          onClick={handleEnter}
+          style={{
+            cursor: 'pointer',
+            color: 'white',
+            fontSize: '0.7rem',
+            letterSpacing: '0.4em',
+            textTransform: 'uppercase',
+            opacity: 0.8,
+            userSelect: 'none',
+            pointerEvents: 'auto',
+            border: '1px solid rgba(255,255,255,0.3)',
+            padding: '15px 30px',
+            transition: 'all 0.3s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+        >
+          [ Tap to Enter ]
+        </div>
+      ) : (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
+          width: '100%'
+        }}>
+          <CinematicText 
+            text="Every hero starts with a choice." 
+            className="void-main-text" 
+            duration={1.5} 
+            delay={0.5} 
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -6,18 +6,26 @@ export const LoadingScreen: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate asset loading
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setPhase('void'), 500);
+          setPhase('void');
           return 100;
         }
-        return prev + Math.random() * 10;
+        return prev + Math.random() * 15;
       });
     }, 100);
-    return () => clearInterval(interval);
+    
+    // Safety timeout: Force enter Void after 5 seconds regardless of progress
+    const timeout = setTimeout(() => {
+      setPhase('void');
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, [setPhase]);
 
   return (
@@ -27,18 +35,19 @@ export const LoadingScreen: React.FC = () => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: 'var(--void-bg)',
+      backgroundColor: '#05050a',
       zIndex: 10000,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      color: 'var(--void-fg)',
+      color: '#f5f3ee',
+      transition: 'opacity 1s ease-out',
     }}>
       <div style={{
         width: '200px',
         height: '1px',
-        backgroundColor: 'var(--void-dim)',
+        backgroundColor: 'rgba(245, 243, 238, 0.2)',
         position: 'relative',
         overflow: 'hidden',
       }}>
@@ -48,18 +57,18 @@ export const LoadingScreen: React.FC = () => {
           top: 0,
           height: '100%',
           width: `${progress}%`,
-          backgroundColor: 'var(--void-fg)',
+          backgroundColor: '#f5f3ee',
           transition: 'width 0.2s ease-out',
         }} />
       </div>
       <div style={{
         marginTop: '20px',
-        fontSize: '0.7rem',
+        fontSize: '0.6rem',
         letterSpacing: '0.3em',
         textTransform: 'uppercase',
-        opacity: 0.6,
+        opacity: 0.5,
       }}>
-        Loading Assets... {Math.round(progress)}%
+        Initializing Cinema... {Math.round(progress)}%
       </div>
     </div>
   );
