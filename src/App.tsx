@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, Noise, Vignette, ChromaticAberration } from '@react-three/postprocessing';
+import { BlendFunction } from 'postprocessing';
 import Lenis from 'lenis';
 import { useStore } from './store/useStore';
 import { CustomCursor } from './components/CustomCursor';
@@ -73,7 +74,7 @@ const App: React.FC = () => {
             luminanceSmoothing={0.9} 
             mipmapBlur 
           />
-          <Noise opacity={0.04} blendMode="overlay" />
+          <Noise opacity={0.04} blendFunction={BlendFunction.OVERLAY} />
           <Vignette offset={0.3} darkness={0.5} />
           <ChromaticAberration offset={[0.001, 0.001]} />
         </EffectComposer>
