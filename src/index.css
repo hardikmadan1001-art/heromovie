@@ -1,0 +1,51 @@
+:root {
+  /* Global / Void */
+  --void-bg: #05050a;
+  --void-fg: #f5f3ee;
+  --void-dim: #8b8b93;
+
+  /* Spider-Man palette */
+  --sm-bg: #0b0e1a;
+  --sm-red: #e62429;
+  --sm-white: #f2f2f2;
+  --sm-cyan: #00e5ff;
+  --sm-magenta: #ff2bd6;
+  --sm-rain: #1c2440;
+
+  /* Iron Man palette */
+  --im-bg: #15171c;
+  --im-gunmetal: #2b2e35;
+  --im-gold: #e8b33d;
+  --im-cyan: #3fe0ff;
+  --im-red: #a6111c;
+  --im-hologram: rgba(90, 209, 255, 0.3);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--void-bg);
+  color: var(--void-fg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.ui-layer {
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.interactive {
+  pointer-events: auto;
+}
