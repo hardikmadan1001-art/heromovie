@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import { useStore } from './store/useStore';
 import { CustomCursor } from './components/CustomCursor';
 import { LoadingScreen } from './components/LoadingScreen';
+import { CinematicText } from './components/CinematicText';
 import { Void } from './scenes/void/Void';
 import { Choice } from './scenes/choice/Choice';
 import { SpidermanPath } from './scenes/spiderman/SpidermanPath';
@@ -56,7 +57,7 @@ const App: React.FC = () => {
       {/* 3. 3D CANVAS LAYER (Background) */}
       <Canvas
         shadows
-        camera={{ fov: 35 }}
+        camera={{ fov: 35, position: [0, 0, 10] }}
         gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
       >
@@ -88,12 +89,16 @@ const App: React.FC = () => {
 
 // Separated UI Component to avoid Canvas rendering issues
 const VoidUI = () => {
-  const { setAudioUnlocked, audioUnlocked } = useStore();
+  const { setAudioUnlocked, setPhase } = useStore();
   const [isUnlocked, setIsUnlocked] = React.useState(false);
 
   const handleEnter = () => {
     setAudioUnlocked(true);
     setIsUnlocked(true);
+  };
+
+  const handleContinue = () => {
+    setPhase('choice');
   };
 
   return (
@@ -127,14 +132,19 @@ const VoidUI = () => {
           [ Tap to Enter ]
         </div>
       ) : (
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-          width: '100%'
-        }}>
+        <div
+          onClick={handleContinue}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            width: '100%',
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+          }}
+        >
           <CinematicText 
             text="Every hero starts with a choice." 
             className="void-main-text" 

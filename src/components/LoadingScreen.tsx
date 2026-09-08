@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../store/useStore';
+import { useAudioInit } from '../audio/AudioManager';
 
 export const LoadingScreen: React.FC = () => {
   const { setPhase } = useStore();
+  useAudioInit(); // Initialize audio on first interaction
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

@@ -7,7 +7,6 @@ import gsap from 'gsap';
 export const Scene3: React.FC = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const bedroomRef = useRef<THREE.Group>(null);
-  const [activeBeat, setActiveBeat] = useState(0);
 
   useEffect(() => {
     const tl = gsap.timeline({

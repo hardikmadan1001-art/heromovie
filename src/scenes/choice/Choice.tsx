@@ -44,7 +44,7 @@ export const Choice: React.FC = () => {
 
   const handleSelect = (hero: 'spiderman' | 'ironman') => {
     // High-Impact "Commit" Sequence
-    audioManager.playSfx('commit');
+    audioManager.playSfx('commit', { volume: 0.7 });
     
     // The "Fork Transition": Blind overexposure
     gsap.to('body', { 

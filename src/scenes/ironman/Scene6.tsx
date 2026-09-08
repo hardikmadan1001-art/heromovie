@@ -9,7 +9,15 @@ import '../../shaders/EnergyRimMaterial';
 export const Scene6: React.FC = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const suitGroupRef = useRef<THREE.Group>(null);
-  const piecesRef = useRef<THREE.Group>(null);
+
+  // Generate piece positions once
+  const piecePositions = useMemo(() => {
+    return [...Array(12)].map(() => [
+      (Math.random() - 0.5) * 10, 
+      (Math.random() - 0.5) * 10, 
+      (Math.random() - 0.5) * 10
+    ]);
+  }, []);
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -33,17 +41,6 @@ export const Scene6: React.FC = () => {
       duration: 1, 
       ease: 'none' 
     }, 0);
-
-    // Piece assembly logic
-    const pieces = piecesRef.current?.children || [];
-    pieces.forEach((piece, i) => {
-      const t = 0.1 + i * (0.8 / pieces.length);
-      tl.to(piece.position, { 
-        x: 0, y: 1, z: 0, 
-        duration: 0.2, 
-        ease: 'power2.in' 
-      }, t);
-    });
   }, []);
 
   return (
@@ -58,21 +55,12 @@ export const Scene6: React.FC = () => {
         </mesh>
 
         {/* Assembly Pieces - positions generated once */}
-        <group ref={piecesRef}>
-          {[...Array(12)].map((_, i) => {
-            const pos = useMemo(() => [
-              (Math.random() - 0.5) * 10, 
-              (Math.random() - 0.5) * 10, 
-              (Math.random() - 0.5) * 10
-            ], []);
-            return (
-              <mesh key={i} position={pos}>
-                <boxGeometry args={[0.4, 0.4, 0.2]} />
-                <energyRimMaterial uRimColor={new THREE.Color('#e8b33d')} uRimIntensity={3} uRimPower={2} />
-              </mesh>
-            );
-          })}
-        </group>
+      {piecePositions.map((pos, i) => (
+        <mesh key={i} position={pos}>
+          <boxGeometry args={[0.4, 0.4, 0.2]} />
+          <energyRimMaterial uRimColor={new THREE.Color('#e8b33d')} uRimIntensity={3} uRimPower={2} />
+        </mesh>
+      ))}
       </group>
 
       <Environment preset="city" />

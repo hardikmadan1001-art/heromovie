@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text, PerspectiveCamera } from '@react-three/drei';
@@ -7,8 +7,6 @@ import gsap from 'gsap';
 export const Scene2: React.FC = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const spiderRef = useRef<THREE.Mesh>(null);
-  const handRef = useRef<THREE.Mesh>(null);
-  const [isBitten, setIsBitten] = useState(false);
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -29,7 +27,6 @@ export const Scene2: React.FC = () => {
       .to({}, { 
         duration: 0.1, 
         onComplete: () => {
-          setIsBitten(true);
           // Trigger visual "BITE" text and screen shake
           gsap.fromTo('.s2-bite-text', { scale: 3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.1 });
           gsap.to(cameraRef.current!.position, { x: 0.05, duration: 0.05, yoyo: true, repeat: 5 });
@@ -42,7 +39,7 @@ export const Scene2: React.FC = () => {
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 2]} fov={35} />
       
       {/* Hand/Wrist Placeholder */}
-      <mesh ref={handRef} position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.2, 0.2, 2]} />
         <meshStandardMaterial color="#d2b48c" />
       </mesh>

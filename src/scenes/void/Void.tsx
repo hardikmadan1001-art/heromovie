@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { Text } from '@react-three/drei';
+
 import { useStore } from '../../store/useStore';
 
 export const Void: React.FC = () => {

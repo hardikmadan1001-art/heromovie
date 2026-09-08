@@ -30,6 +30,8 @@ export const Scene4: React.FC = () => {
     // Power-up animation for the core
     gsap.to(coreRef.current!.scale, { x: 1.5, y: 1.5, z: 1.5, duration: 0.3, yoyo: true, repeat: 1 });
     gsap.to(coreRef.current!.material, { emissiveIntensity: 10, duration: 0.2, yoyo: true, repeat: 1 });
+    // Play activation sound
+    audioManager.playSfx('success', { volume: 0.6 });
   };
 
   return (
