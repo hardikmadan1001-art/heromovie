@@ -6,23 +6,27 @@ export const LoadingScreen: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let mounted = true;
+    
     const interval = setInterval(() => {
       setProgress((prev) => {
+        if (!mounted) return prev;
         if (prev >= 100) {
           clearInterval(interval);
-          setPhase('void');
+          if (mounted) setPhase('void');
           return 100;
         }
-        return prev + Math.random() * 15;
+        return prev + Math.min(15, 100 - prev); // Ensure we don't overshoot and reach 100 reliably
       });
     }, 100);
     
     // Safety timeout: Force enter Void after 5 seconds regardless of progress
     const timeout = setTimeout(() => {
-      setPhase('void');
+      if (mounted) setPhase('void');
     }, 5000);
 
     return () => {
+      mounted = false;
       clearInterval(interval);
       clearTimeout(timeout);
     };

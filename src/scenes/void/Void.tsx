@@ -19,16 +19,17 @@ export const Void: React.FC = () => {
   return (
     <>
       <pointLight ref={lightRef} position={[0, 0, 0]} intensity={0.05} />
+      {/* Static particle positions using ref to avoid re-randomizing on every render */}
       <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            count={300}
-            array={new Float32Array(300 * 3).map(() => (Math.random() - 0.5) * 15)}
+            count={500}
+            array={new Float32Array(500 * 3).map(() => (Math.random() - 0.5) * 20)}
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial size={0.01} color="#f5f3ee" transparent opacity={0.1} sizeAttenuation />
+        <pointsMaterial size={0.05} color="#f5f3ee" transparent opacity={0.3} sizeAttenuation />
       </points>
     </>
   );
