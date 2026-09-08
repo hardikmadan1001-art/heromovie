@@ -11,6 +11,7 @@ interface ExperienceState {
   choice: 'spiderman' | 'ironman' | null;
   quality: Quality;
   audioUnlocked: boolean;
+  error: string | null;
 
   setPhase: (phase: Phase) => void;
   setSceneIndex: (index: number) => void;
@@ -18,6 +19,8 @@ interface ExperienceState {
   setChoice: (choice: 'spiderman' | 'ironman') => void;
   setQuality: (quality: Quality) => void;
   setAudioUnlocked: (unlocked: boolean) => void;
+  setError: (error: string | null) => void;
+  clearError: () => void;
 }
 
 export const useStore = create<ExperienceState>((set) => ({
@@ -28,6 +31,7 @@ export const useStore = create<ExperienceState>((set) => ({
   choice: null,
   quality: 'cinematic',
   audioUnlocked: false,
+  error: null,
 
   setPhase: (phase) => set({ phase }),
   setSceneIndex: (sceneIndex) => set({ sceneIndex }),
@@ -35,4 +39,6 @@ export const useStore = create<ExperienceState>((set) => ({
   setChoice: (choice) => set({ hasChosen: true, choice }),
   setQuality: (quality) => set({ quality }),
   setAudioUnlocked: (audioUnlocked) => set({ audioUnlocked }),
+  setError: (error) => set({ error }),
+  clearError: () => set({ error: null }),
 }));

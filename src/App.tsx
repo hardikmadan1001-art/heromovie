@@ -7,6 +7,7 @@ import { useStore } from './store/useStore';
 import { CustomCursor } from './components/CustomCursor';
 import { LoadingScreen } from './components/LoadingScreen';
 import { CinematicText } from './components/CinematicText';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Void } from './scenes/void/Void';
 import { Choice } from './scenes/choice/Choice';
 import { SpidermanPath } from './scenes/spiderman/SpidermanPath';
@@ -34,56 +35,58 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <CustomCursor />
-      
-      {/* 1. LOADING LAYER (Highest Z-Index) */}
-      {phase === 'preload' && <LoadingScreen />}
-      
-      {/* 2. UI LAYER (Above Canvas) */}
-      <div className="ui-layer" style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        pointerEvents: 'none',
-        zIndex: 100,
-      }}>
-        {phase === 'void' && <VoidUI />}
-        {phase === 'choice' && <div className="choice-ui" />}
-      </div>
-
-      {/* 3. 3D CANVAS LAYER (Background) */}
-      <Canvas
-        shadows
-        camera={{ fov: 35, position: [0, 0, 10] }}
-        gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
-        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
-      >
-        <color attach="background" args={['#05050a']} />
+    <ErrorBoundary>
+      <>
+        <CustomCursor />
         
-        {phase === 'void' && <Void />}
-        {phase === 'choice' && <Choice />}
-        {phase === 'spiderman' && <SpidermanPath />}
-        {phase === 'ironman' && <IronmanPath />}
+        {/* 1. LOADING LAYER (Highest Z-Index) */}
+        {phase === 'preload' && <LoadingScreen />}
+        
+        {/* 2. UI LAYER (Above Canvas) */}
+        <div className="ui-layer" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          pointerEvents: 'none',
+          zIndex: 100,
+        }}>
+          {phase === 'void' && <VoidUI />}
+          {phase === 'choice' && <div className="choice-ui" />}
+        </div>
 
-        <EffectComposer disableNormalPass>
-          <Bloom 
-            intensity={1.5} 
-            luminanceThreshold={0.2} 
-            luminanceSmoothing={0.9} 
-            mipmapBlur 
-          />
-          <Noise opacity={0.04} blendFunction={BlendFunction.OVERLAY} />
-          <Vignette offset={0.3} darkness={0.5} />
-          <ChromaticAberration offset={[0.001, 0.001]} />
-        </EffectComposer>
-      </Canvas>
-      
-      {phase === 'finale' && <Finale />}
-      <div style={{ height: '1400vh', width: '100vw', pointerEvents: 'none' }} />
-    </>
+        {/* 3. 3D CANVAS LAYER (Background) */}
+        <Canvas
+          shadows
+          camera={{ fov: 35, position: [0, 0, 10] }}
+          gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
+          style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
+        >
+          <color attach="background" args={['#05050a']} />
+          
+          {phase === 'void' && <Void />}
+          {phase === 'choice' && <Choice />}
+          {phase === 'spiderman' && <SpidermanPath />}
+          {phase === 'ironman' && <IronmanPath />}
+
+          <EffectComposer disableNormalPass>
+            <Bloom 
+              intensity={1.5} 
+              luminanceThreshold={0.2} 
+              luminanceSmoothing={0.9} 
+              mipmapBlur 
+            />
+            <Noise opacity={0.04} blendFunction={BlendFunction.OVERLAY} />
+            <Vignette offset={0.3} darkness={0.5} />
+            <ChromaticAberration offset={[0.001, 0.001]} />
+          </EffectComposer>
+        </Canvas>
+        
+        {phase === 'finale' && <Finale />}
+        <div style={{ height: '1400vh', width: '100vw', pointerEvents: 'none' }} />
+      </>
+    </ErrorBoundary>
   );
 };
 
