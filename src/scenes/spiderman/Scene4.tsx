@@ -20,6 +20,11 @@ export const Scene4: React.FC = () => {
     ]);
   }, []);
 
+  // Generate wind particle positions once
+  const windPositions = useMemo(() => {
+    return new Float32Array(500 * 3).map(() => (Math.random() - 0.5) * 20);
+  }, []);
+
   useEffect(() => {
     gsap.to(cameraRef.current!.position, {
       x: 40, y: 10, z: 40,
@@ -82,7 +87,7 @@ export const Scene4: React.FC = () => {
           <bufferAttribute
             attach="attributes-position"
             count={500}
-            array={new Float32Array(500 * 3).map(() => (Math.random() - 0.5) * 20)}
+            array={windPositions}
             itemSize={3}
           />
         </bufferGeometry>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text, PerspectiveCamera, Environment } from '@react-three/drei';
@@ -57,18 +57,21 @@ export const Scene6: React.FC = () => {
           <meshStandardMaterial color="#111" />
         </mesh>
 
-        {/* Assembly Pieces */}
+        {/* Assembly Pieces - positions generated once */}
         <group ref={piecesRef}>
-          {[...Array(12)].map((_, i) => (
-            <mesh key={i} position={[
+          {[...Array(12)].map((_, i) => {
+            const pos = useMemo(() => [
               (Math.random() - 0.5) * 10, 
               (Math.random() - 0.5) * 10, 
               (Math.random() - 0.5) * 10
-            ]}>
-              <boxGeometry args={[0.4, 0.4, 0.2]} />
-              <energyRimMaterial uRimColor={new THREE.Color('#e8b33d')} uRimIntensity={3} uRimPower={2} />
-            </mesh>
-          ))}
+            ], []);
+            return (
+              <mesh key={i} position={pos}>
+                <boxGeometry args={[0.4, 0.4, 0.2]} />
+                <energyRimMaterial uRimColor={new THREE.Color('#e8b33d')} uRimIntensity={3} uRimPower={2} />
+              </mesh>
+            );
+          })}
         </group>
       </group>
 
